@@ -178,13 +178,13 @@ uint8_t system_execute_line(char *line)
                 case 'Y': mc_homing_cycle(HOMING_CYCLE_Y); break;
                 case 'Z': mc_homing_cycle(HOMING_CYCLE_Z); break;
               #if N_AXIS > 3
-                case AXIS_4_NAME: mc_homing_cycle(HOMING_CYCLE_4); break;
+                case AXIS_4_NAME: mc_homing_cycle(HOMING_CYCLE_A); break;
               #endif
               #if N_AXIS > 4
-                case AXIS_5_NAME: mc_homing_cycle(HOMING_CYCLE_5); break;
+                case AXIS_5_NAME: mc_homing_cycle(HOMING_CYCLE_B); break;
               #endif
               #if N_AXIS > 5
-                case AXIS_6_NAME: mc_homing_cycle(HOMING_CYCLE_6); break;
+                case AXIS_6_NAME: mc_homing_cycle(HOMING_CYCLE_C); break;
               #endif
                 default: return(STATUS_INVALID_STATEMENT);
               }
