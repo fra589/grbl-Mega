@@ -133,6 +133,122 @@
 
 #endif
 
+#ifdef CPU_MAP_2560_YK // (Arduino Mega 2560)
+
+  // Serial port interrupt vectors
+  #define SERIAL_RX USART0_RX_vect
+  #define SERIAL_UDRE USART0_UDRE_vect
+
+  // Define step pulse output pins. NOTE: All step bit pins must be on the same port.
+  #define STEP_DDR      DDRF
+  #define STEP_PORT     PORTF
+  #define STEP_PIN      PINF
+  #define X_STEP_BIT    0 // MEGA2560 Analog Pin 0
+  #define Y_STEP_BIT    1 // MEGA2560 Analog Pin 1
+  #define Z_STEP_BIT    2 // MEGA2560 Analog Pin 2
+  #define A_STEP_BIT    3 // MEGA2560 Analog Pin 3
+  #define B_STEP_BIT    4 // MEGA2560 Analog Pin 4
+  #define C_STEP_BIT    5 // MEGA2560 Analog Pin 5
+  #define STEP_MASK ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)|(1<<B_STEP_BIT)|(1<<C_STEP_BIT)) // All step bits
+
+  // Define step direction output pins. NOTE: All direction pins must be on the same port.
+  #define DIRECTION_DDR     DDRK
+  #define DIRECTION_PORT    PORTK
+  #define DIRECTION_PIN     PINK
+  #define X_DIRECTION_BIT   0 // MEGA2560 Analog Pin 8
+  #define Y_DIRECTION_BIT   1 // MEGA2560 Analog Pin 9
+  #define Z_DIRECTION_BIT   2 // MEGA2560 Analog Pin 10
+  #define A_DIRECTION_BIT   3 // MEGA2560 Analog Pin 11
+  #define B_DIRECTION_BIT   4 // MEGA2560 Analog Pin 12
+  #define C_DIRECTION_BIT   5 // MEGA2560 Analog Pin 13
+  #define DIRECTION_MASK ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)|(1<<B_DIRECTION_BIT)|(1<<C_DIRECTION_BIT)) // All direction bits
+
+  // Define stepper driver enable/disable output pin.
+  #define STEPPERS_DISABLE_DDR   DDRF
+  #define STEPPERS_DISABLE_PORT  PORTF
+  #define STEPPERS_DISABLE_BIT   6 // MEGA2560 Analog Pin 6
+  #define STEPPERS_DISABLE_MASK (1<<STEPPERS_DISABLE_BIT)
+
+  // Define homing/hard limit switch input pins and limit interrupt vectors.
+  // NOTE: All limit bit pins must be on the same port
+  #define LIMIT_DDR       DDRB
+  #define LIMIT_PORT      PORTB
+  #define LIMIT_PIN       PINB
+  #define X_LIMIT_BIT     4 // MEGA2560 Digital Pin 10
+  #define Y_LIMIT_BIT     5 // MEGA2560 Digital Pin 11
+  #define Z_LIMIT_BIT     6 // MEGA2560 Digital Pin 12
+  #define LIMIT_INT       PCIE0  // Pin change interrupt enable pin
+  #define LIMIT_INT_vect  PCINT0_vect
+  #define LIMIT_PCMSK     PCMSK0 // Pin change interrupt register
+  #define LIMIT_MASK ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
+
+  // Define spindle enable and spindle direction output pins.
+  #define SPINDLE_ENABLE_DDR      DDRF
+  #define SPINDLE_ENABLE_PORT     PORTF
+  #define SPINDLE_ENABLE_BIT      7 // MEGA2560 Analog Pin 7
+  #define SPINDLE_DIRECTION_DDR   DDRK
+  #define SPINDLE_DIRECTION_PORT  PORTK
+  #define SPINDLE_DIRECTION_BIT   6 // MEGA2560 Analog Pin 14 
+
+  // Define flood and mist coolant enable output pins.
+  #define COOLANT_FLOOD_DDR   DDRH
+  #define COOLANT_FLOOD_PORT  PORTH
+  #define COOLANT_FLOOD_BIT   0 // MEGA2560 Digital Pin 17
+  #define COOLANT_MIST_DDR    DDRH
+  #define COOLANT_MIST_PORT   PORTH
+  #define COOLANT_MIST_BIT    1 // MEGA2560 Digital Pin 16
+
+  // Define user-control CONTROLs (cycle start, reset, feed hold) input pins.
+  // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
+  #define CONTROL_DDR       DDRD
+  #define CONTROL_PIN       PIND
+  #define CONTROL_PORT      PORTD
+  #define CONTROL_RESET_BIT         3  // MEGA2560 Digital Pin 18
+  #define CONTROL_FEED_HOLD_BIT     2  // MEGA2560 Digital Pin 19
+  #define CONTROL_CYCLE_START_BIT   1  // MEGA2560 Digital Pin 20
+  #define CONTROL_SAFETY_DOOR_BIT   0  // MEGA2560 Digital Pin 21
+  #define CONTROL_INT       PCIE2  // Pin change interrupt enable pin
+  #define CONTROL_INT_vect  PCINT2_vect
+  #define CONTROL_PCMSK     PCMSK2 // Pin change interrupt register
+  #define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
+
+  // Define probe switch input pin.
+  #define PROBE_DDR       DDRK
+  #define PROBE_PIN       PINK
+  #define PROBE_PORT      PORTK
+  #define PROBE_BIT       7  // MEGA2560 Analog Pin 15
+  #define PROBE_MASK      (1<<PROBE_BIT)
+
+  // Advanced Configuration Below You should not need to touch these variables
+  // Set Timer up to use TIMER4B which is attached to Digital Pin 8 - Ramps 1.4 12v output with heat sink
+  #define SPINDLE_PWM_MAX_VALUE     1024.0 // Translates to about 1.9 kHz PWM frequency at 1/8 prescaler
+  #ifndef SPINDLE_PWM_MIN_VALUE
+  #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
+  #endif
+  #define SPINDLE_PWM_OFF_VALUE     0
+  #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
+
+  //Control Digital Pin 6 which is Servo 2 signal pin on Ramps 1.4 board
+  #define SPINDLE_TCCRA_REGISTER    TCCR4A
+  #define SPINDLE_TCCRB_REGISTER    TCCR4B
+  #define SPINDLE_OCR_REGISTER      OCR4C
+  #define SPINDLE_COMB_BIT          COM4C1
+
+  // 1/8 Prescaler, 16-bit Fast PWM mode
+  #define SPINDLE_TCCRA_INIT_MASK ((1<<WGM40) | (1<<WGM41))
+  #define SPINDLE_TCCRB_INIT_MASK ((1<<WGM42) | (1<<WGM43) | (1<<CS41))
+  #define SPINDLE_OCRA_REGISTER   OCR4A // 16-bit Fast PWM mode requires top reset value stored here.
+  #define SPINDLE_OCRA_TOP_VALUE  0x0400 // PWM counter reset value. Should be the same as PWM_MAX_VALUE in hex.
+
+  // Define spindle output pins.
+  #define SPINDLE_PWM_DDR   DDRH
+  #define SPINDLE_PWM_PORT  PORTH
+  #define SPINDLE_PWM_BIT   5 // MEGA2560 Digital Pin 8
+  
+  
+#endif //CPU_MAP_2560_YK
+
+
 #ifdef CPU_MAP_2560_RAMPS_BOARD // (Arduino Mega 2560) with Ramps 1.4 Board
   #include "nuts_bolts.h"
 

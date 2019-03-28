@@ -631,6 +631,13 @@ ISR(TIMER1_COMPA_vect)
         if (st.exec_block->direction_bits[AXIS_4] & (1<<DIRECTION_BIT(AXIS_4))) { sys_position[AXIS_4]--; }
         else { sys_position[AXIS_4]++; }
       }
+  #else
+    if (st.counter_4 > st.exec_block->step_event_count) {
+      st.step_outbits |= (1<<A_STEP_BIT);
+      st.counter_4 -= st.exec_block->step_event_count;
+      if (st.exec_block->direction_bits & (1<<A_DIRECTION_BIT)) { sys_position[AXIS_4]--; }
+      else { sys_position[AXIS_4]++; }
+    }
     #endif // Ramps Board
   #endif // N_AXIS > 3
   #if N_AXIS > 4
@@ -646,6 +653,13 @@ ISR(TIMER1_COMPA_vect)
         if (st.exec_block->direction_bits[AXIS_5] & (1<<DIRECTION_BIT(AXIS_5))) { sys_position[AXIS_5]--; }
         else { sys_position[AXIS_5]++; }
       }
+    #else
+    if (st.counter_5 > st.exec_block->step_event_count) {
+      st.step_outbits |= (1<<B_STEP_BIT);
+      st.counter_5 -= st.exec_block->step_event_count;
+      if (st.exec_block->direction_bits & (1<<B_DIRECTION_BIT)) { sys_position[AXIS_5]--; }
+      else { sys_position[AXIS_5]++; }
+    }
     #endif // Ramps Board
   #endif // N_AXIS > 4
   #if N_AXIS > 5
@@ -661,6 +675,13 @@ ISR(TIMER1_COMPA_vect)
         if (st.exec_block->direction_bits[AXIS_6] & (1<<DIRECTION_BIT(AXIS_6))) { sys_position[AXIS_6]--; }
         else { sys_position[AXIS_6]++; }
       }
+    #else
+    if (st.counter_6 > st.exec_block->step_event_count) {
+      st.step_outbits |= (1<<C_STEP_BIT);
+      st.counter_6 -= st.exec_block->step_event_count;
+      if (st.exec_block->direction_bits & (1<<C_DIRECTION_BIT)) { sys_position[AXIS_6]--; }
+      else { sys_position[AXIS_6]++; }
+    }
     #endif // Ramps Board
   #endif // N_AXIS > 5
 
