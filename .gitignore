@@ -4,5 +4,8 @@
 *.elf
 *.DS_Store
 *.d
+build/*
+src/*
+.pio/*
 
 README.md
