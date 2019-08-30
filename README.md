@@ -1,5 +1,18 @@
 ![GitHub Logo](https://github.com/fra589/grbl-Mega-5X/blob/edge/doc/images/Mega-5X-logo.svg)
 
+## Updated to use platformio
+
+build using the following commands
+
+```
+$pio run
+```
+Upload to your board using
+
+```
+$pio run --target upload
+```
+
 ***
 
 Grbl is a no-compromise, high performance, low cost alternative to parallel-port-based motion control for CNC milling. This version of Grbl runs on an Arduino Mega2560 only.
